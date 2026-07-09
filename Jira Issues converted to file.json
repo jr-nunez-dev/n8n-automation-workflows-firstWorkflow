@@ -1,0 +1,186 @@
+{
+  "name": "Jira Issues converted to file",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        32
+      ],
+      "id": "1ba95f52-ea3b-439e-a3ba-e018b917dc76",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 100,
+        "options": {
+          "jql": "created >= -30d AND textfields ~ \"request account creation\" ORDER BY created DESC"
+        }
+      },
+      "type": "n8n-nodes-base.jira",
+      "typeVersion": 1,
+      "position": [
+        128,
+        32
+      ],
+      "id": "6c35837d-ca9a-4e0c-893b-f305ca6313e7",
+      "name": "Get many issues",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "taewY0pYea5crzCA",
+          "name": "Jira SW Cloud account 7"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "14b9193e-3778-4fb9-96aa-a85c13b79eeb",
+              "name": "key",
+              "value": "={{ $json.key }}",
+              "type": "string"
+            },
+            {
+              "id": "5d57df43-1f0c-4f1e-9eb3-c8fbcbaf1c2f",
+              "name": "fields.creator.displayName",
+              "value": "={{ $json.fields.creator.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "e185e922-59b9-4219-964c-050e3900a740",
+              "name": "fields.creator.emailAddress",
+              "value": "={{ $json.fields.creator.emailAddress }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        336,
+        32
+      ],
+      "id": "0fc6ef1b-45bf-4eb5-8dc6-ee983c267515",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        544,
+        32
+      ],
+      "id": "a044fbdf-eae2-4684-8b4d-182389145054",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "name": "N8N Automation pacheck",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        752,
+        32
+      ],
+      "id": "6004f372-e66c-4031-be5d-bedf905678a3",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "EUYtURWCceQRxDdK",
+          "name": "Google Drive - ivan"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get many issues",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many issues": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "afab472c-39e5-452a-9849-92fd57ef9a72",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dff061bc3c380400a4adcd35369e48669eb2b46de5ce5cb4effb0d2c7761d8e2"
+  },
+  "nodeGroups": [],
+  "id": "uxMVKJxKOFYwPkX8",
+  "tags": [
+    {
+      "updatedAt": "2026-04-08T18:44:58.995Z",
+      "createdAt": "2026-04-08T18:44:58.995Z",
+      "id": "FCFlwWrKvqYkzKDT",
+      "name": "N8N Automation"
+    }
+  ]
+}
